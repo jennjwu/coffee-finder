@@ -3,24 +3,23 @@
 const PORT = 3000;
 var express = require("express");
 var app = express();
-var dataFetcher = require("./helper.js");
+var dataManager = require("./helper.js");
 
 app.get("/", function (req, res) {
-    logRequest(req);
+    logRequest(req, null);
     res.send("hello world\n");
 });
 
 app.get("/locations", function(req, res) {
-    logRequest(req);
-    res.json(dataFetcher.getData);
+    logRequest(req, null);
+    res.json(dataManager.getLocations.map(i => i.toJson()));
 });
 
 app.get("/locations/:id", function(req, res) {
-    logRequest(req);
-
+    logRequest(req, null);
     try {
-        var responseBody = dataFetcher.getLocation(req.params.id);
-        res.json(responseBody).end();
+        var responseBody = dataManager.getLocation(req.params.id);
+        res.status(200).json(responseBody.toJson()).end();
     } catch (ex) {
         res.status(404);
         console.log("ERROR:", ex.message);
@@ -28,8 +27,61 @@ app.get("/locations/:id", function(req, res) {
     }
 });
 
-function logRequest(req) {
+app.post("/locations", function(req, res) {
+    var body = "";
+    req.on("data", chunk => {
+        body += chunk.toString();
+    });
+    req.on("end", () => {
+        logRequest(req, body);
+
+        try {
+            var responseBody = dataManager.createLocation(body);
+            res.status(201).json(responseBody).end();
+        } catch (ex) {
+            console.log("ERROR:", ex.message);
+            res.status(422).json({"error": ex.message}).end();
+        }
+    });
+});
+
+app.patch("/locations/:id", function(req, res) {
+    var body = "";
+    req.on("data", chunk => {
+        body += chunk.toString();
+    });
+    req.on("end", () => {
+        logRequest(req, body);
+
+        try {
+            var responseBody = dataManager.updateLocation(req.params.id, body);
+            res.status(200).json(responseBody.toJson()).end();
+        } catch (ex) {
+            console.log("ERROR:", ex.message);
+            res.status(422).json({"error": ex.message}).end();
+        }
+    });
+});
+
+app.delete("/locations/:id", function(req, res) {
+    logRequest(req, null);
+
+    try {
+        var responseBody = dataManager.deleteLocation(req.params.id);
+        res.status(204).end();
+    } catch (ex) {
+        console.log("ERROR:", ex.message);
+        res.status(404).json({"error": ex.message});
+    }
+});
+
+// helper to log requests to server
+function logRequest(req, body) {
     console.log("Server received", req.method, "request on", req.url);
+    if (body != null) {
+        console.log("with body")
+        console.log(body);
+    }
 }
 
 var startServer = app.listen(PORT, function() {

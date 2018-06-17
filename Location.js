@@ -6,18 +6,6 @@ function Location(id, name, address, latitude, longitude) {
   this.address = address;
   this.latitude = latitude;
   this.longitude = longitude;
-
-  this.stringified = "{" +
-     '"id":' + this.id + ',' +
-     '"name": "' + this.name + '",' +
-     '"address": "' + this.address + '",' +
-     '"latitude":' + this.latitude + ',' +
-     '"longitude":' + this.longitude +
-  "}";
-
-  this.toJson = function() {
-    return JSON.parse(this.stringified);
-  };
 }
 
 Location.prototype.setName = function(name) {
@@ -36,8 +24,14 @@ Location.prototype.setLongitude = function(longitude) {
     this.longitude = longitude;
 };
 
-Location.prototype.toJSON = function() {
-
+Location.prototype.toJson = function() {
+    return JSON.parse("{" +
+       '"id":' + this.id + ',' +
+       '"name": "' + this.name + '",' +
+       '"address": "' + this.address + '",' +
+       '"latitude":' + this.latitude + ',' +
+       '"longitude":' + this.longitude +
+    "}");
 }
 
 module.exports = Location;
