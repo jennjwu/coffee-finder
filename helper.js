@@ -2,6 +2,7 @@
 
 var data = require("./model.js");
 var Location = require("./Location");
+var Geocode = require("./Geocode");
 
 function validateId(id) {
     if (isNaN(parseInt(id))) {
@@ -14,7 +15,6 @@ function validateId(id) {
 }
 
 function validLocation(location) {
-    // TODO: add some gmaps validation here
     var lat = parseFloat(location.latitude);
     var long = parseFloat(location.longitude);
 
@@ -74,12 +74,10 @@ function updateLocation(id, location) {
         existingLoc.setName(locationJson.name);
     }
 
-    // TODO: validate address?
     if (locationJson.address != null) {
         existingLoc.setAddress(locationJson.address);
     }
 
-    // TODO: validate lat/long?
     if (locationJson.latitude != null && !isNaN(parseFloat(locationJson.latitude))) {
         existingLoc.setLatitude(parseFloat(locationJson.latitude));
     }
@@ -105,10 +103,36 @@ function deleteLocation(id) {
     console.log("deleted location at id", id);
 }
 
+function getClosestLocation(latitude, longitude) {
+    var inputGeocode = new Geocode(latitude, longitude);
+    var idxOfClosestLoc = 0;
+    var closestDistance = Number.POSITIVE_INFINITY;
+
+    for (var i = 0; i < data.length; i++) {
+        if (data[i] != null) {
+            var currLocGeocode = new Geocode(data[i].latitude, data[i].longitude);
+            var distance = getDistance(inputGeocode, currLocGeocode);
+            if (distance < closestDistance) {
+                idxOfClosestLoc = i;
+                closestDistance = distance;
+            }
+        }
+    }
+
+    return data[idxOfClosestLoc];
+}
+
+function getDistance(geocode1, geocode2) {
+    var latDistance = geocode2.latitude - geocode1.latitude;
+    var longDistance = geocode2.longitude - geocode1.longitude;
+    return Math.sqrt(Math.pow(latDistance, 2) + Math.pow(longDistance, 2));
+}
+
 module.exports = {
     getLocations: data,
     getLocation: getLocation,
     createLocation: createLocation,
     updateLocation: updateLocation,
-    deleteLocation: deleteLocation
+    deleteLocation: deleteLocation,
+    getClosestLocation: getClosestLocation
 }

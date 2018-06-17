@@ -1,9 +1,13 @@
 "use strict";
 
 const PORT = 3000;
+const GOOGLE_GEOCODE_API = "https://maps.googleapis.com/maps/api/geocode/json";
+
 var express = require("express");
 var app = express();
 var dataManager = require("./helper.js");
+var fs = require("fs");
+var https = require("https");
 
 app.get("/", function (req, res) {
     logRequest(req, null);
@@ -76,6 +80,41 @@ app.delete("/locations/:id", function(req, res) {
         console.log("ERROR:", ex.message);
         res.status(404).json({"error": ex.message});
     }
+});
+
+app.get("/nearestCoffee", function(req, res) {
+    logRequest(req, null);
+    var queryAddress = req.query.address;
+    console.log("with address", queryAddress);
+
+    var googleAPIKey = process.env.API_KEY;
+    if (googleAPIKey == null) {
+        res.status(500).json({"error": "google geocode api key not provided"}).end();
+    }
+
+    var requestUrl = GOOGLE_GEOCODE_API + "?address=" + queryAddress + "&key=" + googleAPIKey;
+    var request = https.request(requestUrl, function(response) {
+        var data = "";
+        response.on("data", (chunk) => {
+            data += chunk.toString();
+        });
+        response.on("end", () => {
+            var result = JSON.parse(data);
+            if (result.status != "OK") {
+                console.log("ERROR:", result);
+                res.status(500).json({"error": "error from google geocode: " + result.status}).end();
+            } else {
+                var lat = result.results[0].geometry.location.lat;
+                var long = result.results[0].geometry.location.lng;
+                console.log("using lat", lat, "and long", long);
+
+                var closest = dataManager.getClosestLocation(lat, long);
+                res.status(200).json(closest.toJson()).end();
+            }
+        });
+    });
+
+    request.end();
 });
 
 // helper to log requests to server
