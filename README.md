@@ -27,3 +27,5 @@ Using [nodemon](https://www.npmjs.com/package/nodemon) to auto restart node app 
  
  ``` nodemon```
  
+## Tests
+Used [mocha](https://mochajs.org/) and [chai](http://www.chaijs.com/), run `npm test`

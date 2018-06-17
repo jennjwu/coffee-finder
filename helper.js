@@ -18,12 +18,16 @@ function validLocation(location) {
     var lat = parseFloat(location.latitude);
     var long = parseFloat(location.longitude);
 
-    return lat != null && long != null && location.name != null && location.address != null;
+    if (isNaN(lat) || isNaN(long)) {
+        return false;
+    }
+
+    return location.name != null && location.address != null;
 }
 
-function findFirstEmptyIndex() {
-    for (var i = 0; i < data.length; i++) {
-        if (data[i] == null) {
+function findFirstEmptyIndex(arr) {
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] == null) {
             return i;
         }
     }
@@ -38,7 +42,7 @@ function createLocation(location) {
         throw new Error("location data is invalid for creation");
     }
 
-    var id = findFirstEmptyIndex();
+    var id = findFirstEmptyIndex(data);
     data[id] = new Location(id, locationJson.name, locationJson.address,
                             parseFloat(locationJson.latitude), parseFloat(locationJson.longitude));
     console.log("created location at id", id);
@@ -129,10 +133,13 @@ function getDistance(geocode1, geocode2) {
 }
 
 module.exports = {
+    validLocation: validLocation,
+    findFirstEmptyIndex: findFirstEmptyIndex,
     getLocations: data,
     getLocation: getLocation,
     createLocation: createLocation,
     updateLocation: updateLocation,
     deleteLocation: deleteLocation,
+    getDistance: getDistance,
     getClosestLocation: getClosestLocation
 }
