@@ -1,9 +1,8 @@
 ## Get Location
----
 
 Get location by id
 
-**URL**: /location/:id
+**URL**: /locations/:id
 
 **Method**: GET
 
@@ -11,8 +10,8 @@ Get location by id
 
 **Permission required**: no
 
-### Success response
----
+----
+## Success response
 
 **Code**: 200 OK
 
@@ -28,8 +27,8 @@ Get location by id
 }
 ```
 
-### Fail response
----
+----
+## Fail response
 
 **Code**: 404 Not Found
 

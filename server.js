@@ -12,7 +12,10 @@ app.get("/", function (req, res) {
 
 app.get("/locations", function(req, res) {
     logRequest(req, null);
-    res.json(dataManager.getLocations.map(i => i.toJson()));
+    var responseBody = dataManager.getLocations.filter(function(el) {
+        return el != null;
+    }).map(i => i.toJson());
+    res.status(200).json(responseBody);
 });
 
 app.get("/locations/:id", function(req, res) {

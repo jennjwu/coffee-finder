@@ -1,16 +1,7 @@
 "use strict";
 
-var data = require("./init.js");
+var data = require("./model.js");
 var Location = require("./Location");
-
-// TODO: need to fix
-var allLocations = spareArrToDense(data);
-
-function spareArrToDense(data) {
-    return data.filter(function(val) {
-        return val != null;
-    });
-}
 
 function validateId(id) {
     if (isNaN(parseInt(id))) {
@@ -115,8 +106,8 @@ function deleteLocation(id) {
 }
 
 module.exports = {
-    getLocations: allLocations,
-    getLocation : getLocation,
+    getLocations: data,
+    getLocation: getLocation,
     createLocation: createLocation,
     updateLocation: updateLocation,
     deleteLocation: deleteLocation

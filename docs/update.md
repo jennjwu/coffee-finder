@@ -1,6 +1,4 @@
 ## Update Location
----
-
 Update location with new values by id
 
 **URL**: /location/:id
@@ -19,8 +17,8 @@ Update location with new values by id
 
 **Permission required**: no
 
-### Success response
----
+----
+## Success response
 
 **Code**: 200 OK
 
@@ -36,8 +34,8 @@ Update location with new values by id
 }
 ```
 
-### Fail responses
----
+----
+## Fail responses
 
 **Code**: 404 Not Found
 

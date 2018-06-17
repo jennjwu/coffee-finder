@@ -1,9 +1,8 @@
 ## Delete Location
----
 
 Delete location by id
 
-**URL**: /location/:id
+**URL**: /locations/:id
 
 **Method**: DELETE
 
@@ -11,14 +10,13 @@ Delete location by id
 
 **Permission required**: no
 
-### Success response
----
+----
+## Success response
 
 **Code**: 204 No Content
 
-
-### Fail response
----
+----
+## Fail response
 
 **Code**: 404 Not Found
 

@@ -1,9 +1,8 @@
 ## Create Location
----
 
 Create location by id
 
-**URL**: /location
+**URL**: /locations
 
 **Method**: POST
 
@@ -11,8 +10,8 @@ Create location by id
 
 **Permission required**: no
 
-### Success response
----
+----
+## Success response
 
 Returns the id of the newly created location
 
@@ -26,8 +25,8 @@ Returns the id of the newly created location
 }
 ```
 
-### Fail response
----
+----
+## Fail response
 
 **Code**: 422 Unprocessable Entity
 
