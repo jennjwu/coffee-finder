@@ -4,9 +4,11 @@ restful service to find the nearest coffee shop
 ## Setup
 1. Install [node](https://nodejs.org/en/download/) and [npm](https://www.npmjs.com/get-npm) should be installed with it.
 1. Clone this project: `git clone https://github.com/jennjwu/coffee-finder.git`
+1. Go to directory: `cd coffee-finder`
+1. Install dependencies: `npm install`
 
 ## Usage
-0. Get a google geocoding API key _(only needed for /nearestCoffee endpoint)_
+0. Get a [google geocoding API key](https://developers.google.com/maps/documentation/geocoding/start#get-a-key) _(only needed for /nearestCoffee endpoint)_
 1. Run `API_KEY=<api_key> node index.js` to start the server locally
 1. Visit `localhost:3000` to hit the server. Available endpoints are documented in the next section.
 
